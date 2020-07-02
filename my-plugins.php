@@ -101,6 +101,13 @@ class myPlugins {
 			'type' => 'string',
 		) );
 
+		// register meta to store plugin github URL
+		register_post_meta( 'plugin', 'plugin_github_url', array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string',
+		) );
+
 		// @TODO register meta to store plugin info
 
 		// Register script for editor sidebar

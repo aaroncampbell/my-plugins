@@ -1,11 +1,12 @@
 ( function( wp ) {
-	var registerPlugin = wp.plugins.registerPlugin;
-	var PluginSidebar = wp.editPost.PluginSidebar;
-	var el = wp.element.createElement;
-	var Text = wp.components.TextControl;
-	var withSelect = wp.data.withSelect;
+	const registerPlugin = wp.plugins.registerPlugin;
+	const PluginSidebar = wp.editPost.PluginSidebar;
+	const el = wp.element.createElement;
+	const Text = wp.components.TextControl;
+	const withSelect = wp.data.withSelect;
+	const withDispatch = wp.data.withDispatch;
 
-	var mapSelectToProps = function( select ) {
+	const mapPluginSlugSelectToProps = function( select ) {
 		return {
 			metaFieldValue: select( 'core/editor' )
 				.getEditedPostAttribute( 'meta' )
@@ -13,30 +14,72 @@
 		}
 	}
 
-	var MetaBlockField = function( props ) {
+	const mapPluginSlugDispatchToProps = function( dispatch ) {
+		return {
+			setMetaFieldValue: function( value ) {
+				dispatch( 'core/editor' ).editPost(
+					{ meta: { plugin_slug: value } }
+				);
+			}
+		}
+	}
+
+	const PluginSlugField = function( props ) {
 		return el( Text, {
-			label: 'Meta Block Field',
+			label: 'Plugin Slug',
 			value: props.metaFieldValue,
 			onChange: function( content ) {
-				console.log( 'content changed to ', content );
+				props.setMetaFieldValue( content );
 			},
 		} );
 	}
 
-	var MetaBlockFieldWithData = withSelect( mapSelectToProps )( MetaBlockField );
-	// var MetaBlockFieldWithDataAndActions = withDispatch( mapDispatchToProps )( MetaBlockFieldWithData );
+	const PluginSlugFieldWithData = withSelect( mapPluginSlugSelectToProps )( PluginSlugField );
+	const PluginSlugFieldWithDataAndActions = withDispatch( mapPluginSlugDispatchToProps )( PluginSlugFieldWithData );
+
+	const mapGithubURLSelectToProps = function( select ) {
+		return {
+			metaFieldValue: select( 'core/editor' )
+				.getEditedPostAttribute( 'meta' )
+				[ 'plugin_github_url' ]
+		}
+	}
+
+	const mapGithubURLDispatchToProps = function( dispatch ) {
+		return {
+			setMetaFieldValue: function( value ) {
+				dispatch( 'core/editor' ).editPost(
+					{ meta: { plugin_github_url: value } }
+				);
+			}
+		}
+	}
+
+	const GithubURLField = function( props ) {
+		return el( Text, {
+			label: 'Plugin Github URL',
+			value: props.metaFieldValue,
+			onChange: function( content ) {
+				props.setMetaFieldValue( content );
+			},
+		} );
+	}
+
+	const GithubURLFieldWithData = withSelect( mapGithubURLSelectToProps )( GithubURLField );
+	const GithubURLFieldWithDataAndActions = withDispatch( mapGithubURLDispatchToProps )( GithubURLFieldWithData );
 
 	registerPlugin( 'my-plugin-sidebar', {
 		render: function() {
 			return el( PluginSidebar,
 				{
-					name: 'my-plugin-sidebar',
+					name: 'my-plugins-sidebar',
 					icon: 'admin-plugins',
-					title: 'My plugin sidebar',
+					title: 'My plugin info',
 				},
 				el( 'div',
 					{ className: 'plugin-sidebar-content' },
-					el( MetaBlockFieldWithData )
+					el( PluginSlugFieldWithDataAndActions ),
+					el( GithubURLFieldWithDataAndActions )
 				)
 			);
 		}
