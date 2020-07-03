@@ -39,7 +39,6 @@ class myPlugins {
 		add_action( 'wp_footer',                            array( $this, 'wp_footer'                            ) );
 		add_action( 'init',                                 array( $this, 'init'                                 ) );
 		add_action( 'enqueue_block_editor_assets',          array( $this, 'sidebar_script_enqueue'               ) );
-		add_action( 'enqueue_block_assets',                 array( $this, 'sidebar_style_enqueue'                ) );
 	}
 
 	/**
@@ -95,37 +94,41 @@ class myPlugins {
 
 	public function init() {
 		// register meta to store plugin slug
-		register_post_meta( 'plugin', 'plugin_slug', array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string',
-		) );
+		register_post_meta(
+			'plugin',
+			'_plugin_slug',
+			array(
+				'show_in_rest' => true,
+				'type' => 'string',
+				'single' => true,
+				'sanitize_callback' => 'sanitize_text_field',
+				'auth_callback' => array( $this, 'auth_callback' ),
+			)
+		);
 
 		// register meta to store plugin github URL
-		register_post_meta( 'plugin', 'plugin_github_url', array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string',
-		) );
+		register_post_meta(
+			'plugin',
+			'_plugin_github_url',
+			array(
+				'show_in_rest' => true,
+				'type' => 'string',
+				'single' => true,
+				'sanitize_callback' => 'esc_url_raw',
+				'auth_callback' => array( $this, 'auth_callback' ),
+			)
+		);
 
 		// @TODO register meta to store plugin info
 
 		// Register script for editor sidebar
+		$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
+
 		wp_register_script(
 			'editor-sidebar-js',
-			plugins_url( 'editor-sidebar.js', __FILE__ ),
-			array(
-				'wp-plugins',
-				'wp-edit-post',
-				'wp-element',
-				'wp-components',
-				'wp-data',
-			)
-		);
-		// Register style for editor sidebar
-		wp_register_style(
-			'editor-sidebar-css',
-			plugins_url( 'editor-sidebar.css', __FILE__ )
+			plugins_url( 'build/index.js', __FILE__ ),
+			$asset_file['dependencies'],
+			$asset_file['version']
 		);
 	}
 
@@ -133,8 +136,15 @@ class myPlugins {
 		wp_enqueue_script( 'editor-sidebar-js' );
 	}
 
-	public function sidebar_style_enqueue() {
-		wp_enqueue_style( 'editor-sidebar-css' );
+	/**
+	 * Determine if the current user can edit posts
+	 *
+	 * @return bool True when can edit posts, else false.
+	 */
+	public function auth_callback() {
+
+		return current_user_can( 'edit_posts' );
+
 	}
 
 	public function admin_menu() {

@@ -1,0 +1,24 @@
+{
+	"name": "my-plugins",
+	"version": "1.0.0",
+	"description": "My WordPress Plugin for managing my WordPress Plugins",
+	"main": "editor-sidebar.js",
+	"scripts": {
+		"start": "wp-scripts start",
+		"build": "wp-scripts build",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/aaroncampbell/my-plugins.git"
+	},
+	"author": "Aaron D. Campbell",
+	"license": "GPL-2.0-or-later",
+	"bugs": {
+		"url": "https://github.com/aaroncampbell/my-plugins/issues"
+	},
+	"homepage": "https://github.com/aaroncampbell/my-plugins#readme",
+	"devDependencies": {
+		"@wordpress/scripts": "^12.0.0"
+	}
+}
