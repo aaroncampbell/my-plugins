@@ -113,11 +113,11 @@ class myPlugins {
 		);
 
 		// Register script for editor sidebar
-		$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
+		$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/sidebar.asset.php');
 
 		wp_register_script(
 			'editor-sidebar-js',
-			plugins_url( 'build/index.js', __FILE__ ),
+			plugins_url( 'build/sidebar.js', __FILE__ ),
 			$asset_file['dependencies'],
 			$asset_file['version']
 		);
