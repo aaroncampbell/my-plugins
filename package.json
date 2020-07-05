@@ -1,6 +1,6 @@
 {
 	"name": "my-plugins",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "My WordPress Plugin for managing my WordPress Plugins",
 	"main": "editor-sidebar.js",
 	"scripts": {

@@ -3,7 +3,7 @@
  * Plugin Name: myPlugins
  * Plugin URI: http://aarondcampbell.com/
  * Description: Plugin for showing your plugins
- * Version: 1.0.1
+ * Version: 2.0.0
  * Author: Aaron D. Campbell
  * Author URI: http://aarondcampbell.com/
  * Text Domain: my-plugins
